@@ -33,17 +33,31 @@
             >
               Explore
             </v-btn>
+            <v-btn
+              color="orange"
+              round
+              text
+              @click="openEditModal(headline.title)"
+            >
+              Edit
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
+    <edit-title-dialog ref="editDialog"/>
   </v-container>
 </template>
 
 <script>
+
+import EditTitleDialog from '../components/EditTitleDialog.vue'
+
 export default {
-  //
   name: "Headline",
+  components: {
+    EditTitleDialog
+  },
   data: () => ({
     headlines: [
       { title: "book1", rating: 3, year: "2016" },
@@ -66,6 +80,7 @@ export default {
       { title: "book18", rating: 4, year: "2016" },
       { title: "book19", rating: 4, year: "2016" },
     ],
+    isEditingHeadline: false,
   }),
   computed: {
     columns() {
@@ -75,8 +90,13 @@ export default {
   methods: {
     openHeadlinePage(title) {
       console.log(title);
-      this.$router.push("/headline");
+      this.$router.push({ path: '/headline', query: { title: title } });
     },
+    openEditModal(title) {
+      // TODO: Open the modal to edit the headline's title
+      this.isEditingHeadline = true
+      this.$refs.editDialog.show = true
+    }
   },
 };
 </script>

@@ -1,4 +1,5 @@
 <template>
+  This is the Headline component
 </template>
 
 <script>
