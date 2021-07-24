@@ -1,12 +1,12 @@
 <template>
   <div class="text-center">
     <v-dialog v-model="show" width="100%">
-      <v-card>
-        <v-card-text>
-          <div class="text-h2 pa-8">Edit title <title></title></div>
-          <div class="text-h4 pa-8">
-            <input v-model="title" placeholder="edit me" />
-            <div  v-if="!isInputValid" class="text-h6 mt-2 text-red">
+      <v-card :width="dialogWidth">
+        <v-card-text class="text-center">
+          <div class="text-h4">Edit Headline <title></title></div>
+          <div>
+            <textarea class="my-8 input" v-model="title" :placeholder="inputPlaceholder"/>
+            <div v-if="!isInputValid" class="text-h6 mt-2 text-red">
               <v-icon dark right> mdi-cancel </v-icon>
               {{ titleError }}
             </div>
@@ -28,25 +28,46 @@ export default {
   data: () => ({
     //
     show: false,
+    currentTitle: "",
     title: "",
     titleError: "",
+    maxLengthTitle: 100,
   }),
   computed: {
     isInputValid() {
-      if (this.title.length && this.title.length > 10) {
-        this.titleError = "The title must be less than 10 characters";
+      // Validate if the input lenght is not too long
+      if (this.title.length && this.title.length > this.maxLengthTitle) {
+        this.titleError = `The title must be less than ${this.maxLengthTitle} characters`;
         return false;
       } else {
-          this.titleError = ""
-          return true;
+        this.titleError = "";
+        return true;
+      }
+    },
+    inputPlaceholder() {
+      return `Max ${this.maxLengthTitle} chars`
+    },
+    dialogWidth() {
+      // Changes the width of the dialog,
+      // According to the screen size
+      switch (this.$vuetify.display.name) {
+        case "lg":
+          return 400;
+        case "xl":
+          return 600;
+        default:
+          return 'auto';
       }
     },
   },
   methods: {
     saveTitle() {
       if (this.isInputValid) {
-        // TODO: Change the headline's title
-        // Emit event with the value to the parent component
+        // Changes the headline's title
+        this.$store.dispatch("headlines/updateHeadlineTitle", {
+          currentTitle: this.currentTitle,
+          newTitle: this.title,
+        });
         this.closeDialog();
       }
     },
@@ -61,3 +82,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.input {
+  width: 90%;
+}
+</style>

@@ -3,6 +3,7 @@
     <v-row>
       <v-col
         v-for="headline in headlines"
+        class="d-flex child-flex"
         :key="headline.title"
         :cols="columns"
       >
@@ -10,21 +11,20 @@
           flat
           style="margin: 10px; background-color: transparent"
           class="card"
-          min-width="135px"
+          max-width="100%"
         >
-          <div flat class="text-center">
+          <div flat class="text-center gradient">
             <v-img
-              :src="
-                headline.img ||
-                'https://cometofinland.fi/wp-content/uploads/2019/01/8_The_Magic_of_Lapland_1080px.jpg'
-              "
-              class="white--text align-end"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+              :src="headline.urlToImage || ''"
+              class="align-end"
+              gradient="to bottom, black, rgba(0,0,0,.5)"
               height="200px"
+              cover
             >
-              <v-card-title v-text="headline.title" class="text"></v-card-title>
             </v-img>
           </div>
+          <v-card-title>{{ headline.title }}</v-card-title>
+          <v-card-subtitle class="">{{ headline.publishedAt }}</v-card-subtitle>
           <v-card-actions>
             <v-btn
               color="orange lighten-2"
@@ -45,58 +45,59 @@
         </v-card>
       </v-col>
     </v-row>
-    <edit-title-dialog ref="editDialog"/>
+    <edit-title-dialog ref="editDialog" />
   </v-container>
 </template>
 
 <script>
-
-import EditTitleDialog from '../components/EditTitleDialog.vue'
+import { mapGetters } from "vuex";
+import EditTitleDialog from "../components/EditTitleDialog.vue";
 
 export default {
-  name: "Headline",
+  name: "Headlines",
   components: {
-    EditTitleDialog
+    EditTitleDialog,
   },
   data: () => ({
-    headlines: [
-      { title: "book1", rating: 3, year: "2016" },
-      { title: "book2 with very very long text", rating: 5, year: "2016" },
-      { title: "book3", rating: 2.5, year: "2016" },
-      { title: "book4", rating: 1.8, year: "2016" },
-      { title: "book5", rating: 4, year: "2016" },
-      { title: "book6", rating: 4, year: "2016" },
-      { title: "book7", rating: 4, year: "2016" },
-      { title: "book8", rating: 4, year: "2016" },
-      { title: "book9", rating: 4, year: "2016" },
-      { title: "book10", rating: 4, year: "2016" },
-      { title: "book11", rating: 4, year: "2016" },
-      { title: "book12", rating: 4, year: "2016" },
-      { title: "book13", rating: 4, year: "2016" },
-      { title: "book14", rating: 4, year: "2016" },
-      { title: "book15", rating: 4, year: "2016" },
-      { title: "book16", rating: 4, year: "2016" },
-      { title: "book17", rating: 4, year: "2016" },
-      { title: "book18", rating: 4, year: "2016" },
-      { title: "book19", rating: 4, year: "2016" },
-    ],
     isEditingHeadline: false,
   }),
   computed: {
+    ...mapGetters({
+      headlines: "headlines/allHeadlines",
+    }),
     columns() {
-      return 4;
+      // Change the number of headlines displayed,
+      // According to the size of the screen
+      switch (this.$vuetify.display.name) { // this.$vuetify.breakpoint is undefined !
+        case "xs":
+          return 'auto';
+        case "sm":
+          return 'auto';
+        case "md":
+          return 4;
+        case "lg","xl":
+          return 3;
+        default:
+          return 4;
+      }
     },
+  },
+  created() {
+    // Fetch the headlines
+    this.$store.dispatch("headlines/getNewsData");
   },
   methods: {
     openHeadlinePage(title) {
-      console.log(title);
-      this.$router.push({ path: '/headline', query: { title: title } });
+      // Shows the details page of the headline
+      this.$store.dispatch("headlines/getCurrentHeadline", title);
+      this.$router.push({ path: "/headline", query: { title: title } });
     },
     openEditModal(title) {
-      // TODO: Open the modal to edit the headline's title
-      this.isEditingHeadline = true
-      this.$refs.editDialog.show = true
-    }
+      // Opens the modal to edit the headline's title
+      this.isEditingHeadline = true;
+      this.$refs.editDialog.currentTitle = title;
+      this.$refs.editDialog.show = true;
+    },
   },
 };
 </script>
@@ -106,12 +107,29 @@ export default {
   border-radius: 3%;
 }
 .card:hover {
-  box-shadow: 0 0 3pt 2pt aquamarine;
+  box-shadow: 0 0 3pt 2pt rgba(119, 128, 1, 0.397);
   border-radius: 3%;
   cursor: pointer;
 }
+.gradient {
+  position: relative;
+}
+.gradient:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(73, 1, 64, 0.6) 100%
+  ); /* W3C */
+}
 .text {
-  color: black;
+  color: white;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
