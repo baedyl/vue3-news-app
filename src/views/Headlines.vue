@@ -1,5 +1,6 @@
 <template>
-  <v-container style="width: 90%">
+  <app-bar />
+  <v-container>
     <v-row>
       <v-col
         v-for="headline in headlines"
@@ -51,11 +52,13 @@
 
 <script>
 import { mapGetters } from "vuex";
+import AppBar from '../components/AppBar.vue';
 import EditTitleDialog from "../components/EditTitleDialog.vue";
 
 export default {
   name: "Headlines",
   components: {
+    AppBar,
     EditTitleDialog,
   },
   data: () => ({
