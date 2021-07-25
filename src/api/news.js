@@ -6,10 +6,19 @@ let newsSources = [];
 const newsApiKey = import.meta.env.VITE_NEWS_API_KEY;
 
 export default {
-  async getNews() {
-    // Get the most recent headlines
+  async getNews(source = null) {
+    // Get the most recent headlines,
+    // From the us by default
+    let sourceParam = "country=us";
+    if (source) {
+      // If the source is present, use it instead
+      sourceParam = "sources=" + source;
+    }
     const response = await fetch(
-      "https://newsapi.org/v2/top-headlines?country=us&apiKey=" + newsApiKey
+      "https://newsapi.org/v2/top-headlines?" +
+        sourceParam +
+        "&apiKey=" +
+        newsApiKey
     );
     newsData = await response.json();
     return newsData?.articles;
@@ -18,7 +27,7 @@ export default {
   async getSources() {
     // Get the headlines ssources
     const response = await fetch(
-      "https://newsapi.org/v2/top-headlines?country=us&apiKey=" + newsApiKey
+      "https://newsapi.org/v2/sources?apiKey=" + newsApiKey
     );
     newsSources = await response.json();
     return newsSources;
