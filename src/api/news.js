@@ -24,6 +24,19 @@ export default {
     return newsData?.articles;
   },
 
+  async searchNews(searchText) {
+    // Search the most recent headlines
+    if (searchText) {
+      const response = await fetch(
+        `https://newsapi.org/v2/top-headlines?q=${searchText}&apiKey=${newsApiKey}`
+      );
+      newsData = await response.json();
+      return newsData?.articles;
+    } else {
+      return this.getNews()
+    }
+  },
+
   async getSources() {
     // Get the headlines ssources
     const response = await fetch(
