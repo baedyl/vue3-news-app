@@ -1,7 +1,14 @@
 <template>
   <v-app-bar density="compact" class="app-bar text-center">
-    <v-app-bar-title @click="refresh()" class="bar-title">Headlines</v-app-bar-title>
-
+    <v-app-bar-title @click="refresh()" class="bar-title hidden-sm-and-down"
+      >Headlines</v-app-bar-title
+    >
+    <input
+      class="pa-1"
+      v-model="searchText"
+      placeholder="Search headlines"
+      @keyup="searchHeadlines()"
+    />
     <v-spacer></v-spacer>
     <v-btn class="mx-auto" color="primary" plain @click="showSources">
       <v-icon left icon="mdi-filter-outline"></v-icon>
@@ -14,6 +21,10 @@
 <script>
 export default {
   name: "AppBar",
+  data: () => ({
+    //
+    searchText: "",
+  }),
   created() {
     // Fetch the sources
     this.$store.dispatch("sources/getSourcesData");
@@ -24,7 +35,11 @@ export default {
     },
     refresh() {
       this.$store.dispatch("sources/updateSelectedSource", null);
-      this.$emit('refresh');
+      this.searchText = "";
+      this.$emit("refresh");
+    },
+    searchHeadlines() {
+      this.$store.dispatch("headlines/searchNewsData", this.searchText);
     },
   },
 };
@@ -32,6 +47,6 @@ export default {
 
 <style scoped>
 .bar-title {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>
