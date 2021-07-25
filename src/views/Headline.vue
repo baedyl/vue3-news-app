@@ -4,7 +4,7 @@
       <v-card v-if="articleDetails">
         <v-btn class="mx-auto" color="primary" plain @click="goToHeadlines()">
           <v-icon left icon="mdi-arrow-left-bold"></v-icon>
-          <span>Back</span>
+          <span>Headlines</span>
         </v-btn>
         <v-responsive>
           <v-list subheader style="padding-top: 45px">
@@ -50,7 +50,6 @@
                 flat
                 class="card bg-grey source-card my-2"
                 max-width="100%"
-                @click="goToHeadline(headline.title)"
               >
                 <v-card-title>{{ headline.title }}</v-card-title>
                 <!-- <v-card-subtitle class="">{{
@@ -87,11 +86,8 @@ export default {
     goToHeadlines() {
       this.$router.push({ path: "/" });
     },
-    goToHeadline(title) {
-      console.log(title);
-      this.loadHeadline(title);
-    },
     loadHeadline(title) {
+      console.log(title);
       this.$store.dispatch("headlines/getCurrentHeadline", { title });
     }
   },
