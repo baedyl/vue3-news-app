@@ -1,6 +1,7 @@
 <template>
   <app-bar @show-sources="openSourcesDialog()" @refresh="fetchAllHeadlines" />
   <v-container>
+    <pixel-spinner v-show="loading" :animation-duration="2000" :size="65" color="purple" class="spinner"/>
     <v-row>
       <v-col
         v-for="headline in headlines"
@@ -13,6 +14,7 @@
           style="margin: 10px; background-color: transparent"
           class="card"
           max-width="100%"
+          @click="openHeadlinePage(headline.title)"
         >
           <div flat class="text-center gradient">
             <v-img
@@ -27,13 +29,6 @@
           <v-card-title>{{ headline.title }}</v-card-title>
           <v-card-subtitle class="">{{ headline.publishedAt }}</v-card-subtitle>
           <v-card-actions>
-            <v-btn
-              color="orange lighten-2"
-              text
-              @click="openHeadlinePage(headline.title)"
-            >
-              Explore
-            </v-btn>
             <v-btn
               color="orange"
               round
@@ -59,6 +54,7 @@ import { mapGetters } from "vuex";
 import AppBar from "../components/AppBar.vue";
 import EditTitleDialog from "../components/EditTitleDialog.vue";
 import SourcesDialog from "../components/SourcesDialog.vue";
+import { PixelSpinner } from "epic-spinners";
 
 export default {
   name: "Headlines",
@@ -66,6 +62,7 @@ export default {
     AppBar,
     EditTitleDialog,
     SourcesDialog,
+    PixelSpinner,
   },
   data: () => ({
     isEditingHeadline: false,
@@ -73,6 +70,7 @@ export default {
   computed: {
     ...mapGetters({
       headlines: "headlines/allHeadlines",
+      loading: "headlines/loadingState",
       selectedSource: "sources/selectedSource",
     }),
     columns() {
@@ -101,7 +99,7 @@ export default {
   methods: {
     openHeadlinePage(title) {
       // Shows the details page of the headline
-      this.$store.dispatch("headlines/getCurrentHeadline", title);
+      this.$store.dispatch("headlines/getCurrentHeadline", { title, log: true });
       this.$router.push({ path: "/headline", query: { title: title } });
     },
     openEditDialog(title) {
@@ -162,5 +160,9 @@ export default {
 .block {
   display: block !important;
   height: 24px;
+}
+.spinner {
+  margin: auto;
+  top: 10%;
 }
 </style>
