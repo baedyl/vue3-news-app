@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="show" width="100%">
+    <v-dialog v-model="show" width="100%" fullscreen>
       <v-card :width="dialogWidth">
         <v-card-text class="text-center">
           <div class="text-h4">Edit Headline <title></title></div>
@@ -54,7 +54,7 @@ export default {
         case "lg":
           return 400;
         case "xl":
-          return 600;
+          return 500;
         default:
           return 'auto';
       }
