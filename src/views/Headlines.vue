@@ -1,5 +1,5 @@
 <template>
-  <app-bar />
+  <app-bar @show-sources="openSourcesDialog()" @refresh="fetchAllHeadlines" />
   <v-container>
     <v-row>
       <v-col
@@ -38,7 +38,7 @@
               color="orange"
               round
               text
-              @click="openEditModal(headline.title)"
+              @click="openEditDialog(headline.title)"
             >
               Edit
             </v-btn>
@@ -47,19 +47,25 @@
       </v-col>
     </v-row>
     <edit-title-dialog ref="editDialog" />
+    <sources-dialog
+      ref="sourcesDialog"
+      @source-changed="fetchHeadlinesOfSource()"
+    />
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import AppBar from '../components/AppBar.vue';
+import AppBar from "../components/AppBar.vue";
 import EditTitleDialog from "../components/EditTitleDialog.vue";
+import SourcesDialog from "../components/SourcesDialog.vue";
 
 export default {
   name: "Headlines",
   components: {
     AppBar,
     EditTitleDialog,
+    SourcesDialog,
   },
   data: () => ({
     isEditingHeadline: false,
@@ -67,18 +73,21 @@ export default {
   computed: {
     ...mapGetters({
       headlines: "headlines/allHeadlines",
+      selectedSource: "sources/selectedSource",
     }),
     columns() {
       // Change the number of headlines displayed,
       // According to the size of the screen
-      switch (this.$vuetify.display.name) { // this.$vuetify.breakpoint is undefined !
+      switch (
+        this.$vuetify.display.name // this.$vuetify.breakpoint is undefined !
+      ) {
         case "xs":
-          return 'auto';
+          return "auto";
         case "sm":
-          return 'auto';
+          return "auto";
         case "md":
           return 4;
-        case "lg","xl":
+        case ("lg", "xl"):
           return 3;
         default:
           return 4;
@@ -87,7 +96,7 @@ export default {
   },
   created() {
     // Fetch the headlines
-    this.$store.dispatch("headlines/getNewsData");
+    this.fetchAllHeadlines();
   },
   methods: {
     openHeadlinePage(title) {
@@ -95,11 +104,21 @@ export default {
       this.$store.dispatch("headlines/getCurrentHeadline", title);
       this.$router.push({ path: "/headline", query: { title: title } });
     },
-    openEditModal(title) {
+    openEditDialog(title) {
       // Opens the modal to edit the headline's title
       this.isEditingHeadline = true;
       this.$refs.editDialog.currentTitle = title;
       this.$refs.editDialog.show = true;
+    },
+    openSourcesDialog(title) {
+      // Opens the modal to show sources
+      this.$refs.sourcesDialog.show = true;
+    },
+    fetchAllHeadlines() {
+      this.$store.dispatch("headlines/getNewsData");
+    },
+    fetchHeadlinesOfSource() {
+      this.$store.dispatch("headlines/getNewsData", this.selectedSource);
     },
   },
 };

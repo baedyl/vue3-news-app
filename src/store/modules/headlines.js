@@ -35,8 +35,9 @@ const mutations = {
 
 // ACTIONS
 const actions = {
-  async getNewsData({ commit }) {
-    const newsData = await news.getNews();
+  async getNewsData({ commit }, source) {
+    console.log(source);
+    const newsData = source ? await news.getNews(source) : await news.getNews();
     commit("setNews", newsData);
   },
   async getCurrentHeadline({ state, commit, dispatch }, title) {
