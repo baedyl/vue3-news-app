@@ -3,7 +3,7 @@
     <v-dialog v-model="show" width="100%" fullscreen>
       <v-card :width="dialogWidth">
         <v-card-text class="text-center">
-          <div class="text-h4">Edit Headline <title></title></div>
+          <div class="text-h4">Edit Headline<title></title></div>
           <div>
             <textarea class="my-8 input" v-model="title" :placeholder="inputPlaceholder"/>
             <div v-if="!isInputValid" class="text-h6 mt-2 text-red">
@@ -50,13 +50,16 @@ export default {
     dialogWidth() {
       // Changes the width of the dialog,
       // According to the screen size
-      switch (this.$vuetify.display.name) {
-        case "lg":
-          return 400;
-        case "xl":
-          return 500;
-        default:
-          return 'auto';
+      if (this.$store) {
+        // this.$vuetify is undefined during cypress tests
+        switch (this.$vuetify.display.name) {
+          case "lg":
+            return 400;
+          case "xl":
+            return 500;
+          default:
+            return 'auto';
+        }
       }
     },
   },
