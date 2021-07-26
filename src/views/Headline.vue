@@ -7,7 +7,7 @@
           <span>Headlines</span>
         </v-btn>
         <v-responsive>
-          <v-list subheader style="padding-top: 45px">
+          <v-list subheader style="padding-top: 20px">
             <h1
               class="
                 hidden-sm-and-down
@@ -32,50 +32,34 @@
               </v-responsive>
             </v-layout>
           </v-list>
-          <hr />
-          <p>{{ articleDetails.content }}</p>
+          <v-card-title>
+            {{ articleDetails.publishedAt }}
+          </v-card-title>
+          <v-card-text>
+            {{ articleDetails.content }}
+          </v-card-text>
         </v-responsive>
       </v-card>
-      <v-card>
-        <v-card-title>Last seen headlines</v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-container>
-            <v-row
-              v-for="headline in history"
-              class="d-flex child-flex"
-              :key="headline.title"
-            >
-              <v-card
-                flat
-                class="card bg-grey source-card my-2"
-                max-width="100%"
-              >
-                <v-card-title>{{ headline.title }}</v-card-title>
-                <!-- <v-card-subtitle class="">{{
-                  source.category
-                }}</v-card-subtitle> -->
-              </v-card>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
+      <br />
+      <headlines-history />
     </v-col>
   </v-layout>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import HeadlinesHistory from '../components/HeadlinesHistory.vue'
 
 export default {
-  components: {},
+  components: {
+    HeadlinesHistory
+  },
   data: () => ({
     dialog: false,
   }),
   computed: {
     ...mapGetters({
       articleDetails: "headlines/articleDetails",
-      history: "headlines/historyHeadlines",
     }),
   },
   mounted() {
@@ -89,9 +73,7 @@ export default {
     loadHeadline(title) {
       console.log(title);
       this.$store.dispatch("headlines/getCurrentHeadline", { title });
-    }
+    },
   },
 };
 </script>
-
-<style lang="css"></style>
