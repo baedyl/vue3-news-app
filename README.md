@@ -24,6 +24,11 @@ $ npm run dev
 
 You can visit http://localhost:3000 and see the app launched.
 
+## To run cypress tests
+
+``` bash
+npm run test
+
 ## How to build the static files
 
 ``` bash
