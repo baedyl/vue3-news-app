@@ -1,44 +1,25 @@
 <template>
   <app-bar @show-sources="openSourcesDialog()" @refresh="fetchAllHeadlines" />
   <v-container>
-    <pixel-spinner v-show="loading" :animation-duration="2000" :size="65" color="purple" class="spinner"/>
-    <v-row>
+    <pixel-spinner
+      v-show="loading"
+      :animation-duration="2000"
+      :size="65"
+      color="purple"
+      class="spinner"
+    />
+    <v-row align="stretch">
       <v-col
         v-for="headline in headlines"
         class="d-flex child-flex"
         :key="headline.title"
         :cols="columns"
       >
-        <v-card
-          flat
-          style="margin: 10px; background-color: transparent"
-          class="card"
-          max-width="100%"
-          @click="openHeadlinePage(headline.title)"
-        >
-          <div flat class="text-center gradient">
-            <v-img
-              :src="headline.urlToImage || ''"
-              class="align-end"
-              gradient="to bottom, black, rgba(0,0,0,.5)"
-              height="200px"
-              cover
-            >
-            </v-img>
-          </div>
-          <v-card-title>{{ headline.title }}</v-card-title>
-          <v-card-subtitle class="">{{ headline.publishedAt }}</v-card-subtitle>
-          <v-card-actions>
-            <v-btn
-              color="orange"
-              round
-              text
-              @click="openEditDialog(headline.title)"
-            >
-              Edit
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <headline-card
+          :headline="headline"
+          @edit="openEditDialog($event)"
+          @show-sources="openSourcesDialog($event)"
+        />
       </v-col>
     </v-row>
     <edit-title-dialog ref="editDialog" />
@@ -54,6 +35,7 @@ import { mapGetters } from "vuex";
 import AppBar from "../components/AppBar.vue";
 import EditTitleDialog from "../components/EditTitleDialog.vue";
 import SourcesDialog from "../components/SourcesDialog.vue";
+import HeadlineCard from "../components/HeadlineCard.vue";
 import { PixelSpinner } from "epic-spinners";
 
 export default {
@@ -63,6 +45,7 @@ export default {
     EditTitleDialog,
     SourcesDialog,
     PixelSpinner,
+    HeadlineCard,
   },
   data: () => ({
     isEditingHeadline: false,
@@ -99,7 +82,10 @@ export default {
   methods: {
     openHeadlinePage(title) {
       // Shows the details page of the headline
-      this.$store.dispatch("headlines/getCurrentHeadline", { title, log: true });
+      this.$store.dispatch("headlines/getCurrentHeadline", {
+        title,
+        log: true,
+      });
       this.$router.push({ path: "/headline", query: { title: title } });
     },
     openEditDialog(title) {
@@ -164,5 +150,12 @@ export default {
 .spinner {
   margin: auto;
   top: 10%;
+}
+.card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
 }
 </style>
