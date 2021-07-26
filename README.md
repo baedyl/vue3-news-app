@@ -28,6 +28,7 @@ You can visit http://localhost:3000 and see the app launched.
 
 ``` bash
 npm run test
+```
 
 ## How to build the static files
 
