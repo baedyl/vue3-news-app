@@ -4,10 +4,14 @@
   "scripts": {
     "serve": "vite preview",
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "test": "npx cypress run-ct",
+    "open": "npx cypress open-ct"
   },
   "dependencies": {
+    "@cypress/vite-dev-server": "^2.0.2",
     "@mdi/font": "5.9.55",
+    "cypress": "^8.0.0",
     "epic-spinners": "^1.1.0",
     "roboto-fontface": "*",
     "vue": "^3.0.5",
@@ -16,6 +20,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@cypress/vue": "^3.0.0-beta.3",
     "@vitejs/plugin-vue": "^1.2.5",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.5",
