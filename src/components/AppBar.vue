@@ -1,7 +1,7 @@
 <template>
   <v-app-bar density="compact" class="app-bar text-center">
     <v-app-bar-title @click="refresh()" class="bar-title hidden-sm-and-down"
-      >Headlines</v-app-bar-title
+      >{{ title }}</v-app-bar-title
     >
     <input
       class="pa-1"
@@ -24,10 +24,13 @@ export default {
   data: () => ({
     //
     searchText: "",
+    title: "Headlines",
   }),
   created() {
     // Fetch the sources
-    this.$store.dispatch("sources/getSourcesData");
+    if (this.$store) {
+      this.$store.dispatch("sources/getSourcesData");
+    }
   },
   methods: {
     showSources() {
@@ -39,7 +42,9 @@ export default {
       this.$emit("refresh");
     },
     searchHeadlines() {
-      this.$store.dispatch("headlines/searchNewsData", this.searchText);
+      if (this.$store) {
+        this.$store.dispatch("headlines/searchNewsData", this.searchText);
+      }
     },
   },
 };
