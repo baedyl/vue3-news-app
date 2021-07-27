@@ -4,12 +4,14 @@ import news from "../../api/news";
 const state = () => ({
   sources: [],
   selectedSourceId: null,
+  sourcesError: null
 });
 
 // GETTERS
 const getters = {
     allSources: state => { return state.sources },
     selectedSource: state => { return state.selectedSourceId },
+    sourcesError: state => { return state.sourcesError },
 };
 
 // MUTATIONS
@@ -22,6 +24,10 @@ const mutations = {
     // Fills in the selected source
     state.selectedSourceId = id;
   },
+  setSourcesError(state, error) {
+    // Fills in the sources error
+    state.sourcesError = error;
+  },
 };
 
 // ACTIONS
@@ -32,6 +38,10 @@ const actions = {
   },
   updateSelectedSource({ commit }, sourceId) {
     commit("setSelectedSource", sourceId);
+  },
+  async getSourcesError({ commit }) {
+    const response = await news.wrongApiCall();
+    commit("setSourcesError", response);
   },
 };
 

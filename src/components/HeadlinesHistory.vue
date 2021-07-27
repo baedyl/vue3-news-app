@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card @click="wrongApiCall()">
     <v-divider></v-divider>
     <v-card-title>Last seen headlines</v-card-title>
     <v-card-text>
@@ -26,7 +26,18 @@ export default {
   computed: {
     ...mapGetters({
       history: "headlines/historyHeadlines",
+      sourcesError: "sources/sourcesError",
     }),
   },
+  watch: {
+    sourcesError(value) {
+      window.alert(value.message)
+    }
+  },
+  methods: {
+    wrongApiCall() {
+      this.$store.dispatch("sources/getSourcesError");
+    }
+  }
 };
 </script>

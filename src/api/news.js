@@ -38,11 +38,22 @@ export default {
   },
 
   async getSources() {
-    // Get the headlines ssources
+    // Get the headlines sources
     const response = await fetch(
       "https://newsapi.org/v2/sources?apiKey=" + newsApiKey
     );
     newsSources = await response.json();
     return newsSources;
+  },
+
+  async wrongApiCall() {
+    // Make a wrong API call
+    let error = null
+    await fetch(
+      "https://newsapi.org/v2/sources?apiKey"
+    ).then(response => {
+      error = response.json()
+    })
+    return error;
   },
 };
