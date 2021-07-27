@@ -1,31 +1,18 @@
 <template>
-  <v-dialog v-model="show" scrollable fullscreen>
+  <v-dialog v-model="show" scrollable fullscreen> 
     <v-card>
-      <v-card-title>Select a source</v-card-title>
-      <v-divider></v-divider>
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col
-              v-for="source in sources"
-              class="d-flex child-flex"
-              :key="source.id"
-              :cols="columns"
-            >
-              <v-card
-                flat
-                class="card bg-grey source-card"
-                max-width="100%"
-                @click="selectSource(source.id)"
-              >
-                <v-card-title>{{ source.name }}</v-card-title>
-                <v-card-subtitle class="">{{
-                  source.category
-                }}</v-card-subtitle>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+      <v-card-title class="dialog-title bg-primary">Select a source</v-card-title>
+      <v-card-text class="dialog-content">
+        <v-row>
+          <v-col
+            v-for="source in sources"
+            class="d-flex child-flex"
+            :key="source.id"
+            :cols="columns"
+          >
+            <source-card :source="source" @selected="selectSource($event)"/>
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -33,10 +20,13 @@
 
 <script>
 import { mapGetters } from "vuex";
+import SourceCard from './SourceCard.vue'
 
 export default {
   name: "SourcesDialog",
-  components: {},
+  components: {
+    SourceCard
+  },
   data: () => ({
     show: false,
     selectedSource: "",
@@ -56,14 +46,14 @@ export default {
         case "sm":
           return "auto";
         default:
-          return 4;
+          return 3;
       }
     },
   },
   methods: {
     selectSource(sourceId) {
       this.$store.dispatch("sources/updateSelectedSource", sourceId);
-      this.$emit('source-changed');
+      this.$emit("source-changed");
       // Close dialog
       this.show = false;
     },
@@ -74,12 +64,11 @@ export default {
 .v-overlay__content {
   overflow-y: auto !important;
 }
+.v-dialog .v-overlay__content {
+  max-height: 90% !important;
+  max-width: 90% !important;
+}
 .v-card-title {
   word-break: break-word !important;
-}
-.source-card:hover {
-  box-shadow: 0 0 3pt 2pt rgb(148, 71, 122);
-  border-radius: 3%;
-  cursor: pointer;
 }
 </style>

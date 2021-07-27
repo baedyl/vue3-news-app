@@ -10,7 +10,7 @@
       @keyup="searchHeadlines()"
     />
     <v-spacer></v-spacer>
-    <v-btn class="mx-auto" color="primary" plain @click="showSources">
+    <v-btn class="ma-2" color="primary" plain @click="showSources">
       <v-icon left icon="mdi-filter-outline"></v-icon>
 
       <span>Filter</span>

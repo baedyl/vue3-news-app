@@ -71,7 +71,6 @@ export default {
       this.$router.push({ path: "/" });
     },
     loadHeadline(title) {
-      console.log(title);
       this.$store.dispatch("headlines/getCurrentHeadline", { title });
     },
   },
