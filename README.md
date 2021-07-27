@@ -36,6 +36,6 @@ npm run test
 npm run build
 ```
 
-## Online demo
+## Online demo (Not working at the moment)
 
 https://baedyl.github.io/vue3-news-app/
