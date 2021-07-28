@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="show" width="100%" fullscreen>
+    <v-dialog v-model="show" width="100%">
       <v-card :width="dialogWidth">
         <v-card-text class="text-center">
           <div class="text-h4">Edit Headline<title></title></div>

@@ -92,6 +92,7 @@ export default {
       // Opens the modal to edit the headline's title
       this.isEditingHeadline = true;
       this.$refs.editDialog.currentTitle = title;
+      this.$refs.editDialog.title = title;
       this.$refs.editDialog.show = true;
     },
     openSourcesDialog(title) {
