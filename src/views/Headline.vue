@@ -22,13 +22,18 @@
             <h2 class="hidden-md-and-up px-3 font-weight-light display-1">
               {{ articleDetails.title }}
             </h2>
-            <v-layout row justify-center py-2 class="text-xs-center">
+            <v-layout
+              row
+              justify-center
+              py-2
+              class="text-xs-center"
+              @click="redirectToArticle(articleDetails.url)"
+            >
               <v-responsive max-height="600px">
                 <v-img
                   :src="articleDetails.urlToImage || ''"
                   contain
                   class="article-img"
-                  @click="redirectToArticle(articleDetails.url)"
                 ></v-img>
               </v-responsive>
             </v-layout>
@@ -49,11 +54,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import HeadlinesHistory from '../components/HeadlinesHistory.vue'
+import HeadlinesHistory from "../components/HeadlinesHistory.vue";
 
 export default {
   components: {
-    HeadlinesHistory
+    HeadlinesHistory,
   },
   data: () => ({
     dialog: false,
@@ -76,8 +81,8 @@ export default {
     },
     redirectToArticle(url) {
       // Opens a new tab with origianl article
-      window.open(url, 'blank')
-    }
+      window.open(url, "blank");
+    },
   },
 };
 </script>

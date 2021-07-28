@@ -1,5 +1,5 @@
 <template>
-  <app-bar @show-sources="openSourcesDialog()" @refresh="fetchAllHeadlines" />
+  <app-bar @show-sources="openSourcesDialog()" @refresh="fetchHeadlinesOfSource" />
   <v-container>
     <pixel-spinner
       v-show="loading"

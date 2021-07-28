@@ -71,9 +71,10 @@ const actions = {
     const newsData = source ? await news.getNews(source) : await news.getNews();
     commit("setNews", newsData);
   },
-  async searchNewsData({ commit }, searchText) {
+  async searchNewsData({ commit }, params) {
+    const { searchText, source } = { ...params }
     commit("setLoading", true);
-    const newsData = await news.searchNews(searchText);
+    const newsData = await news.searchNews(searchText, source);
     commit("setNews", newsData);
   },
   async getCurrentHeadline({ state, commit, dispatch }, params) {

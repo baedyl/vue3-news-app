@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "AppBar",
   data: () => ({
@@ -28,6 +30,11 @@ export default {
     searchText: "",
     title: "Headlines",
   }),
+  computed: {
+    ...mapGetters({
+      selectedSource: "sources/selectedSource",
+    })
+  },
   created() {
     // Fetch the sources
     if (this.$store) {
@@ -45,7 +52,10 @@ export default {
     },
     searchHeadlines() {
       if (this.$store) {
-        this.$store.dispatch("headlines/searchNewsData", this.searchText);
+        this.$store.dispatch("headlines/searchNewsData", {
+          searchText: this.searchText,
+          source: this.selectedSource
+        });
       }
     },
   },

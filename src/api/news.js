@@ -9,11 +9,9 @@ export default {
   async getNews(source = null) {
     // Get the most recent headlines,
     // From the us by default
-    let sourceParam = "country=us";
-    if (source) {
-      // If the source is present, use it instead
-      sourceParam = "sources=" + source;
-    }
+    // If the source is present, use it instead
+    const sourceParam = source ? "sources=" + source : "country=us";
+
     const response = await fetch(
       "https://newsapi.org/v2/top-headlines?" +
         sourceParam +
@@ -24,16 +22,18 @@ export default {
     return newsData?.articles;
   },
 
-  async searchNews(searchText) {
+  async searchNews(searchText, source = null) {
     // Search the most recent headlines
+    const searchSource = source ? "sources=" + source : "country=us";
+
     if (searchText) {
       const response = await fetch(
-        `https://newsapi.org/v2/top-headlines?q=${searchText}&apiKey=${newsApiKey}`
+        `https://newsapi.org/v2/top-headlines?${searchSource}&q=${searchText}&apiKey=${newsApiKey}`
       );
       newsData = await response.json();
       return newsData?.articles;
     } else {
-      return this.getNews()
+      return this.getNews(source);
     }
   },
 
@@ -48,12 +48,10 @@ export default {
 
   async wrongApiCall() {
     // Make a wrong API call
-    let error = null
-    await fetch(
-      "https://newsapi.org/v2/sources?apiKey"
-    ).then(response => {
-      error = response.json()
-    })
+    let error = null;
+    await fetch("https://newsapi.org/v2/sources?apiKey").then((response) => {
+      error = response.json();
+    });
     return error;
   },
 };
