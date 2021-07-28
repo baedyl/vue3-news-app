@@ -27,7 +27,8 @@
                 <v-img
                   :src="articleDetails.urlToImage || ''"
                   contain
-                  class=""
+                  class="article-img"
+                  @click="redirectToArticle(articleDetails.url)"
                 ></v-img>
               </v-responsive>
             </v-layout>
@@ -73,6 +74,16 @@ export default {
     loadHeadline(title) {
       this.$store.dispatch("headlines/getCurrentHeadline", { title });
     },
+    redirectToArticle(url) {
+      // Opens a new tab with origianl article
+      window.open(url, 'blank')
+    }
   },
 };
 </script>
+
+<style scoped>
+.article-img {
+  cursor: pointer;
+}
+</style>
