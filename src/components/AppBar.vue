@@ -1,19 +1,21 @@
 <template>
   <v-app-bar density="compact" class="app-bar text-center">
-    <v-app-bar-title @click="refresh()" class="bar-title hidden-sm-and-down"
-      >{{ title }}</v-app-bar-title
-    >
+    <v-app-bar-title @click="refresh()" class="bar-title hidden-sm-and-down">{{
+      title
+    }}</v-app-bar-title>
     <input
-      class="pa-1"
+      class="pa-1 search-input"
       v-model="searchText"
       placeholder="Search headlines"
       @keyup="searchHeadlines()"
     />
     <v-spacer></v-spacer>
+    <v-btn class="hidden-md-and-up mr-2" color="primary" @click="refresh()">
+      <v-icon icon="mdi-home-outline"></v-icon>
+    </v-btn>
     <v-btn class="ma-2" color="primary" plain @click="showSources">
-      <v-icon left icon="mdi-filter-outline"></v-icon>
-
-      <span>Filter</span>
+      <v-icon icon="mdi-filter-outline"></v-icon>
+      <span class="hidden-sm-and-down">Filter</span>
     </v-btn>
   </v-app-bar>
 </template>
@@ -53,5 +55,10 @@ export default {
 <style scoped>
 .bar-title {
   cursor: pointer;
+}
+@media only screen and (max-width: 600px) {
+  .search-input {
+    max-width: 150px;
+  }
 }
 </style>
